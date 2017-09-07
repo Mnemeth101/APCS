@@ -1,0 +1,37 @@
+import java.awt.*;
+
+import javax.swing.JFrame;
+
+public class Flag extends JFrame{
+	private static int Length = 350;
+	private static int Height = 250;
+	private int scaleC = (int) (7*Height/13);
+	private int scaleD = (int) (.4*Length);
+	private int scaleL = (int) (0.0404858 * Length);
+	private int offsetx = 5;
+	private int offsety = 30;
+	
+	public Flag() {
+		System.out.println(scaleC);
+		System.out.println(scaleD);
+		init();
+	}
+	
+	public void init() {
+		setSize(Length + 2*offsetx, Height + offsety);
+		repaint();
+	}
+	
+	public void paint(Graphics g) {
+		g.setColor(Color.RED);
+		
+		/*for (int i = 0; i < 7; i++) {
+			int k = 2*i*scaleL;
+			g.drawRect(offsetx, offsety + k, Length, scaleL);
+			g.fillRect(offsetx, offsety + k, Length, scaleL);
+		}
+		*/
+		Union u = new Union(scaleC, scaleD);
+		u.paint(g);
+	}
+}

@@ -1,0 +1,48 @@
+import java.awt.*;
+
+import javax.swing.JFrame;
+
+public class Star extends JFrame {
+	private int numpts = 10;
+	private Double[] dxpts = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+	private Double[] dypts = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};;
+	private int[] xpts = {0,0,0,0,0,0,0,0,0,0};
+	private int[] ypts = {0,0,0,0,0,0,0,0,0,0};
+	private int[] xptsfill = {0,0,0,0,0,0,0,0,0,0};
+	private int[] yptsfill = {0,0,0,0,0,0,0,0,0,0};
+	private int d;
+	
+	public void fillsets() {
+		for (int k = 0; k < 5; k++) {
+			dxpts[2*k] = .5 + .5*Math.cos(2*k*Math.PI/5+Math.PI/2);
+			dxpts[2*k+1] = .5 + .20*Math.cos(2*k*Math.PI/5+7*Math.PI/10);
+	
+			dypts[2*k]= .5 - .5*Math.sin(2*k*Math.PI/5 + Math.PI/2);
+			dypts[2*k+1] = .5 - .15*Math.sin(2*k*Math.PI/5 + 7*Math.PI/10);
+		}
+	}
+
+	public Star(int topleftx, int toplefty, int size) {
+		fillsets();
+		for (int k = 0; k < 10; k++) {
+			Double newx = dxpts[k]*size;
+			int newerx = newx.intValue();
+			Double newy = dypts[k]*size;
+			int newery = newy.intValue();
+			xpts[k] = topleftx + newerx;
+			ypts[k] = toplefty + newery;
+		}
+		d = size;
+		init();
+	}
+	
+	public void init() {
+		setSize(700, 700);
+		repaint();
+	}
+	
+	public void paint(Graphics g) {
+		g.setColor(Color.WHITE);
+		g.fillPolygon(xpts, ypts, numpts);
+	}
+}

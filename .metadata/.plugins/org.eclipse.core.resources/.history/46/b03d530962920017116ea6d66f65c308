@@ -1,0 +1,46 @@
+import java.awt.*;
+
+import javax.swing.JFrame;
+
+public class Union extends JFrame{
+	private static int Length; // ~1.4 Height
+	private static int Height;
+	private int scaleG = (int) (Length*.08289/2);
+	private int scaleH = scaleG*2;
+	private int scaleE = (int) (Height*.100286/2);
+	private int scaleF = scaleE*2;
+	private int scaleK = (int) (Height*.1144);
+	private int offset = 20;
+	
+	public Union(int newLen, int newHei) {
+		Length = newLen;
+		Height = newHei;
+		init();
+	}
+	
+	public void init() {
+		setSize(Length+offset, Height+offset);
+		repaint();
+	}
+	
+	public void paint(Graphics g) {
+		g.setColor(Color.BLUE);
+		g.fillRect(offset, offset, Length, Height);
+		
+		//Rows of 6
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 6; j++) {
+				Star s = new Star(offset + 3*scaleG/2 + 2*j*scaleH, offset + scaleE + 2*i*scaleF, scaleK);
+				s.paint(g);
+			}
+		}	
+		
+		//Rows of 5
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 5; j++) {
+				Star s = new Star(offset + 3*scaleG/2 + scaleH + 2*j*scaleH, offset + scaleE + scaleF + 2*i*scaleF, scaleK);
+				s.paint(g);
+			}
+		}
+	}
+}
