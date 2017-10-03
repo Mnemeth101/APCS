@@ -4,7 +4,7 @@ public class Main {
 		// TODO Auto-generated method stub
 		String sent = "~~p";
 		Tester t = new Tester();
-		t.Test(sent);
+		t.legal(sent);
 	}
 
 }

@@ -1,9 +1,0 @@
-public class Main {
-
-	public static void main(String[] args) {
-		Union u = new Union(350, 250);
-		u.setDefaultCloseOperation(u.EXIT_ON_CLOSE);
-		u.setVisible(true);
-	}
-
-}

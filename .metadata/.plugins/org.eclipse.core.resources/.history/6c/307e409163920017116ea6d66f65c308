@@ -1,9 +1,0 @@
-public class Main {
-
-	public static void main(String[] args) {
-		Flag u = new Union();
-		u.setDefaultCloseOperation(u.EXIT_ON_CLOSE);
-		u.setVisible(true);
-	}
-
-}

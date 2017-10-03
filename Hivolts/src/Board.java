@@ -1,6 +1,6 @@
 
 public class Board {
-	int[][] gameBoard = new int[12][12];
+	public int[][] gameboard = new int[12][12];
 	
 	public Board() {
 		createBorder();
