@@ -1,14 +1,36 @@
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class Mho {
 	static int mhoNum = 2;
 	int mhoX;
 	int mhoY;
-
+	BufferedImage img;
+	
 	public Mho(int xcoord, int ycoord) {
 		this.mhoX = xcoord;
 		this.mhoY = ycoord;
 	}
 
+	public void setImage() {
+		try {
+		    img = ImageIO.read(new File("res/mho.png"));
+		} catch (IOException e) {
+		}
+	}
+		
+	public void draw(int x_offset, int y_offset, int width, int height, Graphics g) {
+		// I leave this understanding to the reader
+		int x = x_offset + 1 + (mhoX * (width + 1));
+		int y = y_offset + 1 + (mhoY * (height + 1));
+		
+		g.drawImage(img, x, y, width, height, null);
+	}
+	
 	public void move (Board b) {
 		//get coordinates of player
 		int playerX = b.getPlayerX();
@@ -45,8 +67,8 @@ public class Mho {
 					int distY1 = Math.abs(playerY-(mhoY+k));
 					boolean smallerX = distX1 < distX;
 					boolean smallerY = distY1 < distY;
-					boolean emptyspace = b.gameBoard[mhoY+k][mhoX+i] == 2;
-					boolean elecfence = b.gameBoard[mhoY+k][mhoX+i] == 3;
+					boolean emptyspace = b.getGameBoard()[mhoY+k][mhoX+i] == 2;
+					boolean elecfence = b.getGameBoard()[mhoY+k][mhoX+i] == 3;
 					/*
 					 * 
 					 * THERE ARE STILL ERRORS IN THE CODE
@@ -101,6 +123,7 @@ public class Mho {
 				}
 			}
 		}		
+		
 	}
 
 }
