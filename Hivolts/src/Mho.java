@@ -45,11 +45,18 @@ public class Mho {
 					int distY1 = Math.abs(playerY-(mhoY+k));
 					boolean smallerX = distX1 < distX;
 					boolean smallerY = distY1 < distY;
-					boolean emptyspace = b.gameBoard[mhoX+i][mhoY+k] == 2;
-					boolean elecfence = b.gameBoard[mhoX+i][mhoY+k] == 3;
-					
+					boolean emptyspace = b.gameBoard[mhoY+k][mhoX+i] == 2;
+					boolean elecfence = b.gameBoard[mhoY+k][mhoX+i] == 3;
+					/*
+					 * 
+					 * THERE ARE STILL ERRORS IN THE CODE
+					 * 1) CHECK IF THE MOVEMENT IS DIAGONAL
+					 * 2) DISTANCE SHOULD BE BEFORE MOVEMENT (distX) NOT AFTER MOVEMENT (distX1)
+					 * 
+					 * 
+					 */
 					//if diagonal, and moving decreases the distance to player, then more onto empty square
-					if ((distX1 == distY1) && (smallerX) && (smallerY) && (emptyspace)){
+					if ((smallerX) && (smallerY) && (emptyspace)){
 						distX = distX1;
 						distY = distY1;
 						mhoX += i;
