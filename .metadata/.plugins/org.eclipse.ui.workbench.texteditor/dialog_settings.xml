@@ -2,18 +2,34 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="mhoY" key="selection"/>
+		<item value="j" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="j"/>
+			<item value="death"/>
+			<item value="game()"/>
+			<item value="this went"/>
+			<item value="at least"/>
+			<item value="showBoard()"/>
+			<item value="showBoard(g"/>
+			<item value="showBoard(g)"/>
+			<item value="repaint()"/>
+			<item value="repaint("/>
+			<item value="repaint"/>
+			<item value="showBo"/>
+			<item value="game("/>
+			<item value="game"/>
 			<item value="moveY"/>
-			<item value="moveX"/>
-			<item value="&#x09;&#x09;"/>
-			<item value="resize"/>
 		</list>
 		<list key="replacehistory">
+			<item value="repaint()"/>
+			<item value="showBoard("/>
+			<item value="showBoard(g)"/>
+			<item value="showBoard()"/>
+			<item value="repaint(g)"/>
 			<item value="mhoY"/>
 			<item value="mhoX"/>
 		</list>
@@ -22,7 +38,7 @@
 		<item value="290" key="DIALOG_WIDTH"/>
 		<item value="1|.AppleSystemUIFont|11.0|0|COCOA|1|.AppleSystemUIFont" key="DIALOG_FONT_NAME"/>
 		<item value="409" key="DIALOG_HEIGHT"/>
-		<item value="474" key="DIALOG_X_ORIGIN"/>
-		<item value="99" key="DIALOG_Y_ORIGIN"/>
+		<item value="700" key="DIALOG_X_ORIGIN"/>
+		<item value="104" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

@@ -1,129 +1,181 @@
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 public class Mho {
 	static int mhoNum = 2;
 	int mhoX;
 	int mhoY;
+	boolean mhoDead = false;
 	BufferedImage img;
+	BufferedImage img2;
+	BufferedImage img3;
+	int imagetoggle = 1;
 	
-	public Mho(int xcoord, int ycoord) {
+	public Mho(int ycoord, int xcoord) {
 		this.mhoX = xcoord;
 		this.mhoY = ycoord;
+		setImage();
 	}
 
+	public void moveMho (Board b, Player player) {
+	
+		//get coordinates of player
+		int playerX = player.posX;
+		int playerY = player.posY;
+
+		int distX = Math.abs(playerX-mhoX);
+		int distY = Math.abs(playerY-mhoY);
+		
+		int closeX = 0;
+		int closeY = 0;
+		
+		if (playerX<mhoX) closeX = -1;
+		if (playerX>mhoX) closeX = 1;
+		if (playerY<mhoY) closeY = -1;
+		if (playerY>mhoY) closeY = 1;
+		
+		
+		b.getGameBoard()[mhoY][mhoX] = 0;
+
+		//first move vertical/horizontal if directly above/to the side
+		if (distX == 0) {
+	
+			if (Math.abs(playerY-(mhoY + 1)) < distY) {
+				if(checkPDeath(b, mhoX, mhoY+1)) player.death();
+				if(checkMDeath(b, mhoX, mhoY+1)) mhoDeath(b);
+				mhoY++;
+			}
+			else {
+				if(checkPDeath(b, mhoX, mhoY-1)) player.death();
+				if(checkMDeath(b, mhoX, mhoY-1)) mhoDeath(b);
+				mhoY--;
+			}
+		}
+		
+		else if (distY == 0) {
+		
+			if (Math.abs(playerX-(mhoX + 1)) < distX) {
+				if(checkPDeath(b, mhoX+1, mhoY)) player.death();
+				if(checkMDeath(b, mhoX+1, mhoY)) mhoDeath(b);
+				mhoX++;
+			}
+			else {
+				if(checkPDeath(b, mhoX-1, mhoY)) player.death();
+				if(checkMDeath(b, mhoX-1, mhoY)) mhoDeath(b);
+				mhoX--;
+			}
+		}
+		
+		else {
+			
+			boolean noMho = false;
+			boolean noFence = false;
+			
+			for (int i = 0; i<2; i++) {
+				if (i==2) noFence = true;
+				
+				if (i!=2) noFence = !(b.getGameBoard()[mhoY+closeY][mhoX+closeX]==3);
+				noMho = !(b.getGameBoard()[mhoY+closeY][mhoX+closeX]==2);
+				if (noFence) {
+					if (noMho) {
+						//System.out.println("diag");
+						//System.out.println(mhoX + " "+ mhoY);
+						if(checkPDeath(b, mhoX+closeX, mhoY+closeY)) player.death();
+						if(checkMDeath(b, mhoX+closeX, mhoY+closeY)) mhoDeath(b);
+						mhoX+=closeX;
+						mhoY+=closeY;
+						System.out.println(mhoX+" "+mhoY);
+						break;
+					}
+				}
+				
+				if (i!=2) noFence = !(b.getGameBoard()[mhoY][mhoX+closeX]==3);
+				noMho = !(b.getGameBoard()[mhoY][mhoX+closeX]==2);
+				if (noFence&&(distX>=distY)) {
+					if (noMho) {
+						//System.out.println("horizontal");
+						if(checkPDeath(b, mhoX+closeX, mhoY)) player.death();
+						if(checkMDeath(b, mhoX+closeX, mhoY)) mhoDeath(b);
+						mhoX+=closeX;
+						break;
+					}
+				}
+				
+				if (i!=2) noFence = !(b.getGameBoard()[mhoY+closeY][mhoX]==3);
+				noMho = !(b.getGameBoard()[mhoY+closeY][mhoX]==2);
+				if (noFence&&(distX<=distY)) {
+					if (noMho) {
+						if(checkPDeath(b, mhoX, mhoY+closeY)) player.death();
+						if(checkMDeath(b, mhoX, mhoY+closeY)) mhoDeath(b);
+						mhoY+=closeY;
+						break;
+					}
+				}
+						
+			}
+	
+		}		
+		
+		
+		b.getGameBoard()[mhoY][mhoX] = 2;
+	}
+	
+	public boolean checkPDeath(Board b, int x, int y) {
+		if (b.getGameBoard()[y][x]==1) {setImageCaught(); return true;}
+		else return false;
+	}
+	
+	public boolean checkMDeath(Board b, int x, int y) {
+		if (b.getGameBoard()[y][x]==3) {setImageDead(); return true;}
+		else return false;
+	}
+	
+	public void mhoDeath(Board b) {
+		b.getGameBoard()[mhoY][mhoX] = 0;
+		this.mhoDead = true;
+		
+	}
+	
+	public int getX() {
+		return mhoX;
+	}
+	
+	public int getY() {
+		return mhoY;
+	}
+	
 	public void setImage() {
 		try {
 		    img = ImageIO.read(new File("res/mho.png"));
 		} catch (IOException e) {
 		}
 	}
-		
-	public void draw(int x_offset, int y_offset, int width, int height, Graphics g) {
-		// I leave this understanding to the reader
-		int x = x_offset + 1 + (mhoX * (width + 1));
-		int y = y_offset + 1 + (mhoY * (height + 1));
-		
-		g.drawImage(img, x, y, width, height, null);
+	
+	public void setImageCaught() {
+		try {
+		    img = ImageIO.read(new File("res/evil.png"));
+		} catch (IOException e) {
+		}
 	}
 	
-	public void move (Board b) {
-		//get coordinates of player
-		int playerX = b.getPlayerX();
-		int playerY = b.getPlayerY();
-
-		int distX = Math.abs(playerX-mhoX);
-		int distY = Math.abs(playerY-mhoY);
-
-		//first move vertical/horizontal if directly above/to the side
-		if (distX == 0) {
-			mhoX = 0;
-			if (Math.abs(playerY-(mhoY + 1)) < distY) {
-				mhoY++;
-			}
-			else {
-				mhoY--;
-			}
+	public void setImageDead() {
+		try {
+		    img = ImageIO.read(new File("res/deadmho.png"));
+		} catch (IOException e) {
 		}
-		
-		else if (distY == 0) {
-			mhoY = 0;
-			if (Math.abs(playerX-(mhoX + 1)) < distX) {
-				mhoX++;
-			}
-			else {
-				mhoX--;
-			}
-		}
-		//move based on conditions
-		else {
-			for (int i = -1; i < 1; i++) {
-				for (int k = -1; k < 1; k++) {
-					int distX1 = Math.abs(playerX-(mhoX+i));
-					int distY1 = Math.abs(playerY-(mhoY+k));
-					boolean smallerX = distX1 < distX;
-					boolean smallerY = distY1 < distY;
-					boolean emptyspace = b.getGameBoard()[mhoY+k][mhoX+i] == 2;
-					boolean elecfence = b.getGameBoard()[mhoY+k][mhoX+i] == 3;
-					/*
-					 * 
-					 * THERE ARE STILL ERRORS IN THE CODE
-					 * 1) CHECK IF THE MOVEMENT IS DIAGONAL
-					 * 2) DISTANCE SHOULD BE BEFORE MOVEMENT (distX) NOT AFTER MOVEMENT (distX1)
-					 * 
-					 * 
-					 */
-					//if diagonal, and moving decreases the distance to player, then more onto empty square
-					if ((smallerX) && (smallerY) && (emptyspace)){
-						distX = distX1;
-						distY = distY1;
-						mhoX += i;
-						mhoY += k;
-					}
-					//if horizontal distance is greater than vertical distance and decreases distance to player, then move onto empty square
-					else if ((distX1 > distY1) && (smallerX) && (emptyspace)) {
-						distX = distX1;
-						mhoX += i;
-						mhoY += k;
-					}
-					//if vertical distance is greater than horizontal distance and decreases distance to player, then move onto empty square
-					else if ((distY1 > distX1) && (smallerY) && (emptyspace)) {
-						distY = distY1;
-						mhoX += i;
-						mhoY += k;
-					}
-					else {
-							//if diagonal, and moving decreases the distance to player, then move onto fence
-							if ((distX1 == distY1) && (smallerX) && (smallerY) && (elecfence)){
-								distX = distX1;
-								distY = distY1;
-								mhoX += i;
-								mhoY += k;
-							}
-							//if horizontal distance is greater than vertical distance and decreases distance to player, then move onto fence
-							else if ((distX1 > distY1) && (smallerX) && (elecfence)) {
-								distX = distX1;
-								mhoX += i;
-								mhoY += k;
-							}
-							//if vertical distance is greater than horizontal distance and decreases distance to player, then move onto fence
-							else if ((distY1 > distX1) && (smallerY) && (elecfence)) {
-								distY = distY1;
-								mhoX += i;
-								mhoY += k;
-							}
-							//otherwise don't move
-							else {
-							}
-					}
-				}
-			}
-		}		
-		
 	}
-
+	
+	public BufferedImage getImage() {
+		return img;
+	}	
+	
+	public BufferedImage getImageCaught() {
+		return img2;
+	}
+	
+	public BufferedImage getImageDead() {
+		return img3;
+	}
 }

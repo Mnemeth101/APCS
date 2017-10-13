@@ -1,4 +1,3 @@
-import java.awt.Graphics;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
@@ -7,27 +6,20 @@ import javax.imageio.*;
 
 public class Fence {
 	static int fenceNum = 3;
-	private int myX;
-	private int myY;
-	private BufferedImage img;
-	
-	public Fence (int x, int y) {
-		this.myX = x;
-		this.myY = y;
+	private static BufferedImage img;
+
+	public Fence() {
+		setImage();
 	}
-	
 	public void setImage() {
 		try {
 		    img = ImageIO.read(new File("res/fence.png"));
 		} catch (IOException e) {
 		}
+		System.out.println("this worked");
 	}
-		
-	public void draw(int x_offset, int y_offset, int width, int height, Graphics g) {
-		// I leave this understanding to the reader
-		int x = x_offset + 1 + (myX * (width + 1));
-		int y = y_offset + 1 + (myY * (height + 1));
-		
-		g.drawImage(img, x, y, width, height, null);
+	
+	public static BufferedImage getImage() {
+		return img;
 	}
 }
