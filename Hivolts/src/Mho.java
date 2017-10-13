@@ -2,6 +2,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 
 public class Mho {
 	static int mhoNum = 2;
@@ -9,18 +10,22 @@ public class Mho {
 	int mhoY;
 	boolean mhoDead = false;
 	BufferedImage img;
-	BufferedImage img2;
-	BufferedImage img3;
-	int imagetoggle = 1;
+	private JFrame f;
 	
-	public Mho(int ycoord, int xcoord) {
+	public Mho(int ycoord, int xcoord, JFrame f) {
 		this.mhoX = xcoord;
 		this.mhoY = ycoord;
+		this.f = f;
 		setImage();
 	}
 
+	/**
+	 * Calculates movement for mho
+	 * @param b
+	 * @param player
+	 */
 	public void moveMho (Board b, Player player) {
-	
+
 		//get coordinates of player
 		int playerX = player.posX;
 		int playerY = player.posY;
@@ -43,12 +48,12 @@ public class Mho {
 		if (distX == 0) {
 	
 			if (Math.abs(playerY-(mhoY + 1)) < distY) {
-				if(checkPDeath(b, mhoX, mhoY+1)) player.death();
+				if(checkPDeath(b, mhoX, mhoY+1)) player.death(f);
 				if(checkMDeath(b, mhoX, mhoY+1)) mhoDeath(b);
 				mhoY++;
 			}
 			else {
-				if(checkPDeath(b, mhoX, mhoY-1)) player.death();
+				if(checkPDeath(b, mhoX, mhoY-1)) player.death(f);
 				if(checkMDeath(b, mhoX, mhoY-1)) mhoDeath(b);
 				mhoY--;
 			}
@@ -57,12 +62,12 @@ public class Mho {
 		else if (distY == 0) {
 		
 			if (Math.abs(playerX-(mhoX + 1)) < distX) {
-				if(checkPDeath(b, mhoX+1, mhoY)) player.death();
+				if(checkPDeath(b, mhoX+1, mhoY)) player.death(f);
 				if(checkMDeath(b, mhoX+1, mhoY)) mhoDeath(b);
 				mhoX++;
 			}
 			else {
-				if(checkPDeath(b, mhoX-1, mhoY)) player.death();
+				if(checkPDeath(b, mhoX-1, mhoY)) player.death(f);
 				if(checkMDeath(b, mhoX-1, mhoY)) mhoDeath(b);
 				mhoX--;
 			}
@@ -82,7 +87,7 @@ public class Mho {
 					if (noMho) {
 						//System.out.println("diag");
 						//System.out.println(mhoX + " "+ mhoY);
-						if(checkPDeath(b, mhoX+closeX, mhoY+closeY)) player.death();
+						if(checkPDeath(b, mhoX+closeX, mhoY+closeY)) player.death(f);
 						if(checkMDeath(b, mhoX+closeX, mhoY+closeY)) mhoDeath(b);
 						mhoX+=closeX;
 						mhoY+=closeY;
@@ -96,7 +101,7 @@ public class Mho {
 				if (noFence&&(distX>=distY)) {
 					if (noMho) {
 						//System.out.println("horizontal");
-						if(checkPDeath(b, mhoX+closeX, mhoY)) player.death();
+						if(checkPDeath(b, mhoX+closeX, mhoY)) player.death(f);
 						if(checkMDeath(b, mhoX+closeX, mhoY)) mhoDeath(b);
 						mhoX+=closeX;
 						break;
@@ -107,7 +112,7 @@ public class Mho {
 				noMho = !(b.getGameBoard()[mhoY+closeY][mhoX]==2);
 				if (noFence&&(distX<=distY)) {
 					if (noMho) {
-						if(checkPDeath(b, mhoX, mhoY+closeY)) player.death();
+						if(checkPDeath(b, mhoX, mhoY+closeY)) player.death(f);
 						if(checkMDeath(b, mhoX, mhoY+closeY)) mhoDeath(b);
 						mhoY+=closeY;
 						break;
@@ -122,30 +127,43 @@ public class Mho {
 		b.getGameBoard()[mhoY][mhoX] = 2;
 	}
 	
+	/**
+	 * checks if mho will hit a player
+	 * @param b
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean checkPDeath(Board b, int x, int y) {
 		if (b.getGameBoard()[y][x]==1) {setImageCaught(); return true;}
 		else return false;
 	}
 	
+	/**
+	 * Checks if mho will hit a wall
+	 * @param b
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean checkMDeath(Board b, int x, int y) {
 		if (b.getGameBoard()[y][x]==3) {setImageDead(); return true;}
 		else return false;
 	}
 	
+	/**
+	 * Sets a mho as dead
+	 * @param b
+	 */
 	public void mhoDeath(Board b) {
 		b.getGameBoard()[mhoY][mhoX] = 0;
 		this.mhoDead = true;
 		
 	}
 	
-	public int getX() {
-		return mhoX;
-	}
-	
-	public int getY() {
-		return mhoY;
-	}
-	
+	/**
+	 * sets base image
+	 */
 	public void setImage() {
 		try {
 		    img = ImageIO.read(new File("res/mho.png"));
@@ -153,6 +171,9 @@ public class Mho {
 		}
 	}
 	
+	/**
+	 * sets image for loss
+	 */
 	public void setImageCaught() {
 		try {
 		    img = ImageIO.read(new File("res/evil.png"));
@@ -160,6 +181,9 @@ public class Mho {
 		}
 	}
 	
+	/**
+	 * sets image for dead mho
+	 */
 	public void setImageDead() {
 		try {
 		    img = ImageIO.read(new File("res/deadmho.png"));
@@ -170,12 +194,4 @@ public class Mho {
 	public BufferedImage getImage() {
 		return img;
 	}	
-	
-	public BufferedImage getImageCaught() {
-		return img2;
-	}
-	
-	public BufferedImage getImageDead() {
-		return img3;
-	}
 }
