@@ -82,7 +82,7 @@ class Card {
      * Constructor with arguments.
      */
     public Card(int suit, int rank) { 
-    		this.suit = 0;  this.rank = rank;
+    		this.suit = suit;  this.rank = rank;
     }
 
     /*
@@ -329,7 +329,7 @@ class Deck {
 		// (d1 and d2 get garbage collected)
 		return d1.merge(d2);
     }
-    /* Question 15.5.
+    /* Question 15.5.3
      * deal() creates a Pokerhand from a Deck object (invoked by the Deck object itself), which
      * works by randomly shuffling the deck, then taking the first (handsize number) of cards out
      * of the deck and putting them in the Pokerhand, and nullifying those spots in the Deck.
