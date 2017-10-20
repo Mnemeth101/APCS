@@ -2,12 +2,15 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="j" key="selection"/>
+		<item value="Deck" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="Deck"/>
+			<item value="merge"/>
+			<item value="System.out."/>
 			<item value="j"/>
 			<item value="death"/>
 			<item value="game()"/>
@@ -20,9 +23,6 @@
 			<item value="repaint("/>
 			<item value="repaint"/>
 			<item value="showBo"/>
-			<item value="game("/>
-			<item value="game"/>
-			<item value="moveY"/>
 		</list>
 		<list key="replacehistory">
 			<item value="repaint()"/>
